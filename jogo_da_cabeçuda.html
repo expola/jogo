@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Jogo do Cabeção e dos Beijinhos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b8b;
+            --secondary-color: #7c5295;
+            --accent-color: #ffc2d1;
+            --light-color: #fff9fa;
+            --dark-color: #4a4a4a;
+            --success-color: #42b883;
+            --error-color: #ff5252;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffc2d1' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: var(--gradient);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0px rgba(255, 107, 139, 0.2);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+        
+        .etapa {
+            display: none;
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            position: relative;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .etapa.ativa {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .etapa h2 {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .etapa h2::before {
+            content: "";
+            display: inline-block;
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z'/%3E%3C/svg%3E");
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            position: relative;
+            display: none;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feedback::before {
+            content: "\f4ad";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .radio-group {
+            margin: 20px 0;
+        }
+        
+        .radio-option {
+            display: block;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 35px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            user-select: none;
+            transition: all 0.2s;
+            border-radius: 8px;
+            padding: 12px 12px 12px 45px;
+        }
+        
+        .radio-option:hover {
+            background-color: rgba(255, 198, 209, 0.2);
+        }
+        
+        .radio-option input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 15px;
+            height: 22px;
+            width: 22px;
+            background-color: #eee;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            transition: all 0.2s;
+        }
+        
+        .radio-option:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+        
+        .radio-option input:checked ~ .checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        
+        .radio-option input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .radio-option .checkmark:after {
+            top: 5px;
+            left: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: var(--gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 139, 0.4);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 107, 139, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-next {
+            margin-top: 20px;
+            display: none;
+            animation: pulse 2s infinite;
+        }
+        
+        .btn-next::after {
+            content: "\f061";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-left: 8px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 139, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 107, 139, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 139, 0);
+            }
+        }
+        
+        .btn-submit {
+            margin-top: 15px;
+        }
+        
+        .btn-submit::after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-left: 8px;
+        }
+        
+        .btn-multiply {
+            background: linear-gradient(135deg, #ff9a8b, #ff6b8b);
+            margin-top: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .btn-multiply::before {
+            content: "\f069";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 8px;
+        }
+        
+        #contador-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 198, 209, 0.2);
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        #contador-beijos {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 15px 0;
+            display: block;
+            text-shadow: 1px 1px 0px rgba(255, 107, 139, 0.2);
+            animation: scaleNumber 0.5s ease-in-out;
+        }
+        
+        @keyframes scaleNumber {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        #multiplicacao-texto {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            opacity: 0.5;
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z'/%3E%3C/svg%3E");
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            animation: float 3s linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            top: -10px;
+            z-index: 999;
+        }
+        
+        #resultado-final {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        #mensagem-final {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        #link-final {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 139, 0.4);
+        }
+        
+        #link-final:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 107, 139, 0.5);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--gradient);
+            transition: width 0.5s ease;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+            margin: 0 3px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .etapa {
+                padding: 15px;
+            }
+            
+            .etapa h2 {
+                font-size: 1.3rem;
+            }
+            
+            .radio-option {
+                font-size: 1rem;
+                padding: 10px 10px 10px 40px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            #contador-beijos {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span class="emoji">🌟</span> 
+            O Jogo da cabeçuda e os Beijinhos 
+            <span class="emoji">🌟</span>
+        </h1>
+        <p class="subtitle">
+            <span class="emoji">🎯</span> 
+            Meta: Chegar a 1 TRILHÃO de beijos (ou uma coxinha misteriosa!)
+        </p>
+        
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        
+        <!-- Etapa 1: Cabeção -->
+        <div id="etapa-1" class="etapa ativa">
+            <h2>Pergunta 1: Quem tem o maior cabeção?</h2>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q1" value="A" required>
+                    <span class="checkmark"></span>
+                    Eu <span class="emoji">🙃</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q1" value="B" required>
+                    <span class="checkmark"></span>
+                    Você <span class="emoji">🤔</span>
+                </label>
+            </div>
+            <button type="button" class="btn btn-submit" onclick="responderQ1()">Responder</button>
+            <div id="feedback-q1" class="feedback"></div>
+            <button id="btn-proximo-1" class="btn btn-next" onclick="proximaEtapa('etapa-2')">Próxima Pergunta</button>
+        </div>
+
+        <!-- Etapa 2: Thonga -->
+        <div id="etapa-2" class="etapa">
+            <h2>Pergunta 2: Quem é o(a) mais thonga?</h2>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q2" value="A" required>
+                    <span class="checkmark"></span>
+                    Eu <span class="emoji">🤪</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q2" value="B" required>
+                    <span class="checkmark"></span>
+                    Você <span class="emoji">😜</span>
+                </label>
+            </div>
+            <button type="button" class="btn btn-submit" onclick="responderQ2()">Responder</button>
+            <div id="feedback-q2" class="feedback"></div>
+            <button id="btn-proximo-2" class="btn btn-next" onclick="proximaEtapa('etapa-3')">Próxima Pergunta</button>
+        </div>
+
+        <!-- Etapa 3: Lanche -->
+        <div id="etapa-3" class="etapa">
+            <h2>Pergunta 3: Quem tá me devendo um lanche por causa da planilha?</h2>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q3" value="A" required>
+                    <span class="checkmark"></span>
+                    Eu <span class="emoji">🥪</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q3" value="B" required>
+                    <span class="checkmark"></span>
+                    Você <span class="emoji">🍔</span>
+                </label>
+            </div>
+            <button type="button" class="btn btn-submit" onclick="responderQ3()">Responder</button>
+            <div id="feedback-q3" class="feedback"></div>
+            <button id="btn-proximo-3" class="btn btn-next" onclick="proximaEtapa('etapa-4')">Próxima Pergunta</button>
+        </div>
+
+        <!-- Etapa 4: Quem ganha beijos -->
+        <div id="etapa-4" class="etapa">
+            <h2>Pergunta 4: Quem vai ganhar muito beijinho e carinho?</h2>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q4" value="A" required>
+                    <span class="checkmark"></span>
+                    Um cabeçudo misterioso <span class="emoji">😘</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q4" value="B" required>
+                    <span class="checkmark"></span>
+                    Um cabeça de Minecraft <span class="emoji">🎮</span>
+                </label>
+            </div>
+            <button type="button" class="btn btn-submit" onclick="responderQ4()">Confirmar Escolha</button>
+        </div>
+
+        <!-- Etapa 4.1: Quantidade Inicial -->
+        <div id="etapa-4-1" class="etapa">
+            <h2>Ok, agora escolha a quantidade de beijinhos iniciais:</h2>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q4-1" value="0" required>
+                    <span class="checkmark"></span>
+                    0 beijinhos <span class="emoji">💔</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q4-1" value="1" required>
+                    <span class="checkmark"></span>
+                    1 beijinho <span class="emoji">💕</span>
+                </label>
+            </div>
+            <button type="button" class="btn btn-submit" onclick="responderQ4_1()">Confirmar Quantidade</button>
+        </div>
+
+        <!-- Etapa 4.2: Multiplicar ou Manter -->
+        <div id="etapa-4-2" class="etapa">
+            <h2>Certo! Com 1 beijinho, agora a pergunta decisiva: Você quer...</h2>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="q4-2" value="A" required>
+                    <span class="checkmark"></span>
+                    Multiplicar o beijo por um número mágico <span class="emoji">✨</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="q4-2" value="B" required>
+                    <span class="checkmark"></span>
+                    dobrar e dar pro proximo? 
+                </label>
+            </div>
+            <button type="button" class="btn btn-submit" onclick="responderQ4_2()">Decidir o Destino do Beijo</button>
+        </div>
+
+        <!-- Etapa 5: Multiplicação -->
+        <div id="etapa-5" class="etapa">
+            <h2>Vamos aplicar a Regrinha Aleatória™!</h2>
+            <div id="contador-container">
+                <div class="hearts-container" id="hearts-container"></div>
+                <p>Seu número atual de beijos:</p>
+                <span id="contador-beijos">1</span>
+                <p id="multiplicacao-texto">Clique para multiplicar pela sua fofura!</p>
+            </div>
+            <div style="text-align: center;">
+                <button id="btn-multiplicar" class="btn btn-multiply" onclick="multiplicarBeijos()">Multiplicar Beijos x1000 (Passo 1)</button>
+            </div>
+        </div>
+
+        <!-- Etapa Final: Resultado -->
+        <div id="resultado-final" class="etapa">
+            <h2>Resultado Final!</h2>
+            <p id="mensagem-final"></p>
+            <div id="confetti-container"></div>
+            <a id="link-final" href="#" target="_blank">Clique aqui!</a>
+        </div>
+        
+    </div>
+    
+    <!-- Script JavaScript -->
+    <script>
+        // URLs para os links
+        const linkPlanilha = "https://docs.google.com/spreadsheets/d/1wmfo_vV-dkfu1G4QRxx1y-rJRFdNdmh2Xm-qHhfgiiI/edit?usp=sharing"; 
+        const linkRickRoll = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+        let beijosAtuais = 0;
+        let etapaMultiplicacao = 0; // 0 = inicial, 1 = após 1ª mult, 2 = após 2ª mult
+        let etapaAtual = 1;
+        const totalEtapas = 7;
+
+        // Atualiza a barra de progresso
+        function atualizarProgresso(etapa) {
+            const progressBar = document.getElementById('progress-bar');
+            const porcentagem = (etapa / totalEtapas) * 100;
+            progressBar.style.width = porcentagem + '%';
+        }
+
+        // Animação de corações
+        function criarCoracao() {
+            const heartsContainer = document.getElementById('hearts-container');
+            if (heartsContainer) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 2 + 2) + 's'; // Entre 2-4s
+                heartsContainer.appendChild(heart);
+                
+                // Remove o coração após a animação
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }
+        }
+
+        function mostrarEtapa(idEtapa) {
+            document.querySelectorAll('.etapa').forEach(etapa => {
+                etapa.classList.remove('ativa');
+            });
+            document.getElementById(idEtapa).classList.add('ativa');
+            
+            // Atualiza etapa atual para barra de progresso
+            if (idEtapa === 'etapa-1') etapaAtual = 1;
+            else if (idEtapa === 'etapa-2') etapaAtual = 2;
+            else if (idEtapa === 'etapa-3') etapaAtual = 3;
+            else if (idEtapa === 'etapa-4') etapaAtual = 4;
+            else if (idEtapa === 'etapa-4-1') etapaAtual = 5;
+            else if (idEtapa === 'etapa-4-2') etapaAtual = 6;
+            else if (idEtapa === 'etapa-5') etapaAtual = 7;
+            
+            atualizarProgresso(etapaAtual);
+        }
+
+        function proximaEtapa(idProximaEtapa) {
+            mostrarEtapa(idProximaEtapa);
+        }
+
+        function mostrarFeedback(idFeedback, mensagem, idBotaoProximo = null) {
+            const feedbackDiv = document.getElementById(idFeedback);
+            feedbackDiv.innerText = mensagem;
+            feedbackDiv.style.display = 'block';
+            if (idBotaoProximo) {
+                document.getElementById(idBotaoProximo).style.display = 'inline-flex';
+            }
+        }
+        
+        // Cria confetti quando o jogo for vencido
+        function criarConfetti() {
+            const colors = ['#ff6b8b', '#7c5295', '#ffc2d1'];
+            const confettiContainer = document.getElementById('confetti-container');
+            
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    confettiContainer.appendChild(confetti);
+                    
+                    // Animação de queda
+                    const animation = confetti.animate(
+                        [
+                            { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                            { transform: `translate(${Math.random() * 100 - 50}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                        ],
+                        {
+                            duration: Math.random() * 3000 + 2000,
+                            easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)',
+                        }
+                    );
+                    
+                    animation.onfinish = () => confetti.remove();
+                }, Math.random() * 2000);
+            }
+        }
+
+        function mostrarResultado(sucesso, mensagem) {
+            const resultadoDiv = document.getElementById('resultado-final');
+            const mensagemP = document.getElementById('mensagem-final');
+            const linkA = document.getElementById('link-final');
+
+            mensagemP.innerText = mensagem;
+            linkA.href = sucesso ? linkPlanilha : linkRickRoll;
+            linkA.innerText = sucesso ? "Acessar a Planilha Secreta! 📊" : "Ver sua Consolação... 🎬";
+
+            mostrarEtapa('resultado-final');
+            
+            if (sucesso) {
+                criarConfetti();
+                linkA.classList.add('success');
+            }
+        }
+
+        // Inicia a animação de corações a cada segundo no contador
+        setInterval(criarCoracao, 1000);
+
+        // --- Lógica das Perguntas ---
+
+        function responderQ1() {
+            const resposta = document.querySelector('input[name="q1"]:checked');
+            if (!resposta) { 
+                alert('Escolha uma opção primeiro!'); 
+                return; 
+            }
+
+            const feedbackMsg = resposta.value === 'A' ?
+                "Então você admite que tem um cabeção... 🤔 Isso é um grande passo! Autoconhecimento é tudo." :
+                "Ué?? Então você tá dizendo que eu tenho cabeção? Tá gravado isso aqui, viu? Vou salvar como prova.";
+
+            mostrarFeedback('feedback-q1', feedbackMsg, 'btn-proximo-1');
+            document.querySelector('#etapa-1 .btn-submit').disabled = true; 
+        }
+
+        function responderQ2() {
+            const resposta = document.querySelector('input[name="q2"]:checked');
+            if (!resposta) { 
+                alert('Escolha uma opção primeiro!'); 
+                return; 
+            }
+
+            const feedbackMsg = resposta.value === 'A' ?
+                "Muito thonga e cabeçuda! 😂" :
+                "Muito thonga mesmo! Pelo menos você assume com orgulho 😉";
+
+            mostrarFeedback('feedback-q2', feedbackMsg, 'btn-proximo-2');
+            document.querySelector('#etapa-2 .btn-submit').disabled = true;
+        }
+
+        function responderQ3() {
+            const resposta = document.querySelector('input[name="q3"]:checked');
+            if (!resposta) { 
+                alert('Escolha uma opção primeiro!'); 
+                return; 
+            }
+
+            const feedbackMsg = resposta.value === 'A' ?
+                "Então já posso pedir minha coxinha da esquina? Com suquinho também, né? Estou esperando! 😏" :
+                "Então já posso ir aí na esquina comer essa coxinha? Tô com fome desde a aba 3 da planilha. Quase desmaiei! 😋";
+
+            mostrarFeedback('feedback-q3', feedbackMsg, 'btn-proximo-3');
+            document.querySelector('#etapa-3 .btn-submit').disabled = true;
+        }
+
+        function responderQ4() {
+            const resposta = document.querySelector('input[name="q4"]:checked');
+            if (!resposta) { 
+                alert('Escolha uma opção primeiro!'); 
+                return; 
+            }
+
+            if (resposta.value === 'A') { // Escolheu "Um cabeçudo misterioso"
+                proximaEtapa('etapa-4-1');
+            } else { // Escolheu "Cabeça de Minecraft"
+                mostrarResultado(false, "Ah, então tá bom... Você prefere beijar um personagem de Minecraft? Escolha errada! 😢");
+            }
+            document.querySelector('#etapa-4 .btn-submit').disabled = true;
+        }
+
+        function responderQ4_1() {
+            const resposta = document.querySelector('input[name="q4-1"]:checked');
+            if (!resposta) { 
+                alert('Escolha uma opção primeiro!'); 
+                return; 
+            }
+
+            if (resposta.value === '1') { // Escolheu 1 beijinho
+                beijosAtuais = 1;
+                proximaEtapa('etapa-4-2');
+            } else { // Escolheu 0 beijinhos
+                mostrarResultado(false, "ZERO?! Que frieza… 💔 Nem um beijinho sequer?");
+            }
+            document.querySelector('#etapa-4-1 .btn-submit').disabled = true;
+        }
+
+        function responderQ4_2() {
+            const resposta = document.querySelector('input[name="q4-2"]:checked');
+            if (!resposta) { 
+                alert('Escolha uma opção primeiro!'); 
+                return; 
+            }
+
+            if (resposta.value === 'A') { // Escolheu Multiplicar
+                etapaMultiplicacao = 1; // Inicia a primeira etapa da multiplicação
+                document.getElementById('contador-beijos').innerText = beijosAtuais.toLocaleString('pt-BR');
+                proximaEtapa('etapa-5');
+            } else { // Escolheu Manter
+                mostrarResultado(false, "Só 1 beijo não desbloqueia a planilha secreta! A coxinha também não vai vir... Que pena... 😕");
+            }
+            document.querySelector('#etapa-4-2 .btn-submit').disabled = true;
+        }
+
+        // --- Lógica da Multiplicação (3 passos para chegar a 1 Trilhão) ---
+        function multiplicarBeijos() {
+            const btnMultiplicar = document.getElementById('btn-multiplicar');
+            const contadorBeijosEl = document.getElementById('contador-beijos');
+            const multiplicacaoTextoEl = document.getElementById('multiplicacao-texto');
+
+            // Adiciona vários corações quando multipilcar
+            for (let i = 0; i < 15; i++) {
+                setTimeout(criarCoracao, i * 100);
+            }
+
+            if (etapaMultiplicacao === 1) {
+                beijosAtuais *= 1000; // 1 * 1000 = 1.000
+                contadorBeijosEl.innerText = beijosAtuais.toLocaleString('pt-BR');
+                contadorBeijosEl.style.animation = 'none';
+                setTimeout(() => {
+                    contadorBeijosEl.style.animation = 'scaleNumber 0.5s ease-in-out';
+                }, 10);
+                multiplicacaoTextoEl.innerText = "Agora multiplique pela minha paciência com seu 'cabeção' 😉";
+                btnMultiplicar.innerText = "Multiplicar Beijos x1.000 (Passo 2)";
+                etapaMultiplicacao = 2;
+            } else if (etapaMultiplicacao === 2) {
+                beijosAtuais *= 1000; // 1.000 * 1.000 = 1.000.000 (1 Milhão)
+                contadorBeijosEl.innerText = beijosAtuais.toLocaleString('pt-BR');
+                contadorBeijosEl.style.animation = 'none';
+                setTimeout(() => {
+                    contadorBeijosEl.style.animation = 'scaleNumber 0.5s ease-in-out';
+                }, 10);
+                multiplicacaoTextoEl.innerText = "Uau! 1 Milhão! Multiplicação final: por cada risada que já demos juntos!";
+                btnMultiplicar.innerText = "Multiplicar Beijos x1.000.000 (Passo Final!)";
+                etapaMultiplicacao = 3;
+            } else if (etapaMultiplicacao === 3) {
+                beijosAtuais *= 1000000; // 1.000.000 * 1.000.000 = 1.000.000.000.000 (1 Trilhão)
+                contadorBeijosEl.innerText = beijosAtuais.toLocaleString('pt-BR');
+                contadorBeijosEl.style.animation = 'none';
+                setTimeout(() => {
+                    contadorBeijosEl.style.animation = 'scaleNumber 0.5s ease-in-out';
+                }, 10);
+                // Esconde o botão de multiplicar, o jogo acabou com sucesso
+                btnMultiplicar.style.display = 'none';
+                multiplicacaoTextoEl.innerText = "Contagem final de beijos:";
+                
+                // Espera um pouco para dar um efeito dramático
+                setTimeout(() => {
+                    // Mostra resultado de sucesso
+                    mostrarResultado(true, "BOOOOOA! 1 TRILHÃO de beijos alcançado! 🎉 Você conseguiu! concluída com sucesso! Agora você pode comprar uma coxinha para mim e dar os meus beijinhos!");
+                }, 1500);
+            }
+        }
+
+        // Inicializar a barra de progresso
+        atualizarProgresso(1);
+    </script>
+</body>
+</html>
